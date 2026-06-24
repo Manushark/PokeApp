@@ -1,0 +1,147 @@
+<div class="tab-content-wrapper">
+  <div class="content-header">
+    <h2>Buscar Pokémon</h2>
+    <p>Busca un Pokémon específico por su nombre o su ID nacional.</p>
+  </div>
+
+  <!-- Formulario de Búsqueda -->
+  @if (!pokemonData() && !loading()) {
+    <div class="search-form-container">
+      <div class="search-box">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            [formControl]="searchControl" 
+            placeholder="Ej: Pikachu, Charizard, 150..." 
+            (keyup.enter)="searchPokemon()"
+            autocomplete="off">
+          <button (click)="searchPokemon()" [disabled]="!searchControl.value.trim()">Buscar</button>
+        </div>
+        <p class="search-hint">Puedes buscar por nombre o número de Pokédex.</p>
+      </div>
+
+      <!-- Pokémon Destacados (Sugerencias) -->
+      <div class="featured-section">
+        <h3>Sugerencias de Búsqueda</h3>
+        
+        @if (loadingFeatured()) {
+          <div class="mini-loader">
+            <div class="dots-bubble"></div>
+            <span>Cargando sugerencias...</span>
+          </div>
+        } @else {
+          <div class="featured-grid">
+            @for (poke of featuredPokemons(); track poke.id) {
+              <div 
+                class="featured-card"
+                (click)="selectedPokemonForModal.set(poke)"
+                [style.background-color]="getTypeColor(poke.types[0].type.name) + '15'"
+                [style.border-color]="getTypeTextColor(poke.types[0].type.name) + '45'">
+                
+                <div class="featured-card-img">
+                  <img 
+                    [src]="poke.sprites.other['official-artwork'].front_default || poke.sprites.front_default" 
+                    [alt]="poke.name"
+                    loading="lazy">
+                </div>
+                
+                <h4 [style.color]="getTypeTextColor(poke.types[0].type.name)">{{ poke.name | titlecase }}</h4>
+                
+                <span 
+                  class="featured-type-label" 
+                  [style.background-color]="getTypeColor(poke.types[0].type.name) + '20'" 
+                  [style.color]="getTypeTextColor(poke.types[0].type.name)">
+                  {{ translateType(poke.types[0].type.name) }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loader-container">
+      <div class="spinning-pokeball"></div>
+      <p>Consultando base de datos PokéAPI...</p>
+    </div>
+  }
+
+  @if (errorMessage() && !loading()) {
+    <div class="error-container">
+      <p class="error-msg">Error: {{ errorMessage() }}</p>
+      <button class="retry-btn" (click)="clearSearch()">Volver a buscar</button>
+    </div>
+  }
+
+  <!-- Detalle del Pokémon Encontrado -->
+  @if (pokemonData() && !loading()) {
+    <div class="pokemon-card-container">
+      <!-- Añadido evento de click para abrir el modal -->
+      <div 
+        class="pokemon-card" 
+        (click)="selectedPokemonForModal.set(pokemonData())"
+        style="cursor: pointer"
+        [style.border-color]="getTypeTextColor(pokemonData().types[0].type.name) + '45'" 
+        [style.background-color]="getTypeColor(pokemonData().types[0].type.name) + '20'">
+        
+        <div class="card-header">
+          <span class="pokemon-id">#{{ pokemonData().id | number:'3.0' }}</span>
+          <span class="pokemon-hp" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+            HP {{ pokemonData().stats[0].base_stat }}
+          </span>
+        </div>
+
+        <div class="card-image-bg">
+          <img 
+            [src]="pokemonData().sprites.other['official-artwork'].front_default || pokemonData().sprites.front_default" 
+            [alt]="pokemonData().name">
+        </div>
+
+        <h2 class="pokemon-name" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+          {{ pokemonData().name | titlecase }}
+        </h2>
+        
+        <div class="types-badges">
+          @for (t of pokemonData().types; track t.type.name) {
+            <span 
+              class="type-badge" 
+              [style.background-color]="getTypeColor(t.type.name) + '20'"
+              [style.color]="getTypeTextColor(t.type.name)"
+              [style.border-color]="getTypeTextColor(t.type.name) + '45'">
+              {{ translateType(t.type.name) }}
+            </span>
+          }
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-col">
+            <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+              {{ pokemonData().weight / 10 }} kg
+            </strong>
+            <span>Peso</span>
+          </div>
+          <div class="stat-col">
+            <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+              {{ pokemonData().height / 10 }} m
+            </strong>
+            <span>Altura</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="clear-btn" (click)="clearSearch()">
+        Nueva búsqueda
+      </button>
+    </div>
+  }
+
+  <!-- Renderizado del Modal Detallado -->
+  @if (selectedPokemonForModal()) {
+    <app-pokemon-detail-modal 
+      [pokemon]="selectedPokemonForModal()" 
+      (close)="clearModal()">
+    </app-pokemon-detail-modal>
+  }
+</div>

@@ -1,0 +1,100 @@
+<div class="modal-backdrop" (click)="close.emit()">
+  <div class="modal-card" (click)="$event.stopPropagation()" [style.border-color]="getTypeTextColor(pokemon.types[0].type.name)">
+    
+    <!-- Botón de Cerrar -->
+    <button class="close-btn" (click)="close.emit()" aria-label="Cerrar">
+      ✕
+    </button>
+
+    <div class="modal-layout">
+      <!-- Columna Izquierda: Imagen y Nombre -->
+      <div class="modal-left" [style.background-color]="getTypeColor(pokemon.types[0].type.name) + '20'">
+        <div class="poke-id">#{{ pokemon.id | number:'3.0' }}</div>
+        
+        <div class="poke-image-container">
+          <img 
+            [src]="pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default" 
+            [alt]="pokemon.name">
+        </div>
+
+        <h2 [style.color]="getTypeTextColor(pokemon.types[0].type.name)">
+          {{ pokemon.name | titlecase }}
+        </h2>
+
+        <div class="types-badges">
+          @for (t of pokemon.types; track t.type.name) {
+            <span 
+              class="type-badge" 
+              [style.background-color]="getTypeColor(t.type.name) + '20'"
+              [style.color]="getTypeTextColor(t.type.name)"
+              [style.border-color]="getTypeTextColor(t.type.name) + '45'">
+              {{ translateType(t.type.name) }}
+            </span>
+          }
+        </div>
+
+        <div class="physical-info">
+          <div class="phys-item">
+            <strong>{{ pokemon.weight / 10 }} kg</strong>
+            <span>Peso</span>
+          </div>
+          <div class="phys-item">
+            <strong>{{ pokemon.height / 10 }} m</strong>
+            <span>Altura</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Detalles, Habilidades y Estadísticas -->
+      <div class="modal-right">
+        <!-- Descripción de la Pokedex -->
+        <div class="details-section">
+          <h3>Descripción Pokédex</h3>
+          @if (loadingDescription()) {
+            <div class="mini-loader">
+              <div class="dots-bubble"></div>
+              <span>Consultando Pokédex...</span>
+            </div>
+          } @else {
+            <p class="description-text">{{ description() }}</p>
+          }
+        </div>
+
+        <!-- Habilidades -->
+        <div class="details-section">
+          <h3>Habilidades</h3>
+          <div class="abilities-list">
+            @for (ab of pokemon.abilities; track ab.ability.name) {
+              <div class="ability-card">
+                <span class="ability-name">{{ translateAbility(ab.ability.name) }}</span>
+                @if (ab.is_hidden) {
+                  <span class="hidden-badge">Oculta</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Estadísticas Base -->
+        <div class="details-section">
+          <h3>Estadísticas Base</h3>
+          <div class="stats-bars-container">
+            @for (st of pokemon.stats; track st.stat.name) {
+              <div class="stat-bar-row">
+                <span class="stat-label">{{ translateStatName(st.stat.name) }}</span>
+                <span class="stat-value">{{ st.base_stat }}</span>
+                <div class="progress-bar-bg">
+                  <div 
+                    class="progress-bar-fill" 
+                    [style.width.%]="(st.base_stat / 150) * 100"
+                    [style.background-color]="getTypeTextColor(pokemon.types[0].type.name)">
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

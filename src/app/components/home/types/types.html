@@ -1,0 +1,121 @@
+<div class="tab-content-wrapper">
+  
+  @if (!selectedType()) {
+    <!-- Vista 1: Listado general de Tipos -->
+    <div class="content-header">
+      <h2>Tipos de Pokémon</h2>
+      <p>Selecciona un tipo elemental para ver todos sus Pokémon de la primera generación.</p>
+    </div>
+
+    @if (loading()) {
+      <div class="loader-container">
+        <div class="spinning-pokeball"></div>
+        <p>Cargando elementos...</p>
+      </div>
+    }
+
+    @if (errorMessage() && !loading()) {
+      <div class="error-container">
+        <p class="error-msg">Error: {{ errorMessage() }}</p>
+        <button class="retry-btn" (click)="loadPokemonTypes()">Reintentar</button>
+      </div>
+    }
+
+    @if (pokemonTypes().length > 0 && !loading()) {
+      <div class="types-grid-container">
+        <div class="types-grid">
+          @for (type of pokemonTypes(); track type.name) {
+            <button 
+              class="type-card-btn" 
+              (click)="selectType(type.name)"
+              [style.background-color]="getTypeColor(type.name) + '20'"
+              [style.border-color]="getTypeTextColor(type.name) + '45'"
+              [style.color]="getTypeTextColor(type.name)">
+              <span class="type-name">{{ translateType(type.name) }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <!-- Vista 2: Detalle de Pokémon del Tipo Seleccionado -->
+    <div class="detail-header-wrapper">
+      <button class="back-btn" (click)="clearSelection()">
+        ← Volver a los tipos
+      </button>
+      
+      <div class="detail-content-header">
+        <h2 [style.color]="getTypeTextColor(selectedType()!)">
+          Tipo {{ translateType(selectedType()!) }}
+        </h2>
+        <p>Mostrando Pokémon registrados bajo este tipo.</p>
+      </div>
+    </div>
+
+    @if (loadingPokemon()) {
+      <div class="loader-container">
+        <div class="spinning-pokeball"></div>
+        <p>Buscando Pokémon de tipo {{ translateType(selectedType()!) }}...</p>
+      </div>
+    }
+
+    @if (errorMessage() && !loadingPokemon()) {
+      <div class="error-container">
+        <p class="error-msg">Error: {{ errorMessage() }}</p>
+        <button class="retry-btn" (click)="selectType(selectedType()!)">Reintentar</button>
+      </div>
+    }
+
+    @if (pokemonOfSelectedType().length > 0 && !loadingPokemon()) {
+      <div class="pokemon-list-container">
+        <div class="pokemon-list-grid">
+          @for (poke of pokemonOfSelectedType(); track poke.id) {
+            <!-- Añadido evento de click para ver los detalles del Pokémon -->
+            <div 
+              class="mini-pokemon-card" 
+              (click)="viewPokemonDetails(poke.name)"
+              style="cursor: pointer"
+              [style.background-color]="getTypeColor(selectedType()!) + '15'"
+              [style.border-color]="getTypeTextColor(selectedType()!) + '45'">
+              
+              <div class="mini-card-header">
+                <span class="poke-id">#{{ poke.id | number:'3.0' }}</span>
+              </div>
+              
+              <div class="mini-card-img">
+                <img [src]="poke.imageUrl" [alt]="poke.name" loading="lazy">
+              </div>
+              
+              <h4 class="poke-name" [style.color]="getTypeTextColor(selectedType()!)">
+                {{ poke.name | titlecase }}
+              </h4>
+            </div>
+          }
+        </div>
+      </div>
+    } @else if (pokemonOfSelectedType().length === 0 && !loadingPokemon()) {
+      <div class="no-pokemon-found">
+        <p>No se encontraron Pokémon de la primera generación para este tipo.</p>
+      </div>
+    }
+  }
+
+  <!-- Cargador de Detalles (para cuando se hace click en una mini tarjeta) -->
+  @if (loadingModal()) {
+    <div class="modal-backdrop">
+      <div class="loader-container" style="background: rgba(255,255,255,0.9); padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); text-align: center;">
+        <div class="spinning-pokeball"></div>
+        <p style="color: #1a202c; font-weight: 700; margin: 0;">Cargando datos de la Pokédex...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Renderizado del Modal Detallado -->
+  @if (selectedPokemonForModal()) {
+    <app-pokemon-detail-modal 
+      [pokemon]="selectedPokemonForModal()" 
+      (close)="clearModal()">
+    </app-pokemon-detail-modal>
+  }
+
+</div>
