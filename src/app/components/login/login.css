@@ -3,7 +3,7 @@
   height: 100vh;
   width: 100%;
   font-family: 'Outfit', 'Inter', sans-serif;
-  background-color: #f7fafc;
+  background-color: #fcfdfe;
   overflow: hidden;
 }
 
@@ -12,43 +12,46 @@
   height: 100vh;
   width: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Difuminado de Fondo (Backdrop Blobs) */
+/* Difuminado de Fondo (Blobs de Luz Soft Pastel) */
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.45;
+  filter: blur(80px);
+  opacity: 0.35;
   z-index: 1;
   pointer-events: none;
-  animation: floatBlobs 20s infinite alternate ease-in-out;
+  animation: floatBlobs 25s infinite alternate ease-in-out;
 }
 
 .blob-red {
-  width: 350px;
-  height: 350px;
-  background-color: #ff8a88;
-  top: -100px;
-  right: -50px;
+  width: 400px;
+  height: 400px;
+  background-color: #ffb3b3;
+  top: -150px;
+  right: -100px;
 }
 
 .blob-yellow {
-  width: 400px;
-  height: 400px;
-  background-color: #ffe680;
-  bottom: -150px;
-  left: 20%;
-  animation-delay: -5s;
+  width: 450px;
+  height: 450px;
+  background-color: #fff2cc;
+  bottom: -200px;
+  left: 15%;
+  animation-delay: -6s;
 }
 
 .blob-blue {
-  width: 300px;
-  height: 300px;
-  background-color: #b3d1ff;
-  top: 40%;
-  left: -100px;
-  animation-delay: -10s;
+  width: 350px;
+  height: 350px;
+  background-color: #cce0ff;
+  top: 35%;
+  left: -120px;
+  animation-delay: -12s;
 }
 
 @keyframes floatBlobs {
@@ -56,60 +59,58 @@
     transform: translate(0, 0) scale(1);
   }
   100% {
-    transform: translate(40px, 30px) scale(1.15);
+    transform: translate(50px, 40px) scale(1.1);
   }
 }
 
 .login-container {
   position: relative;
   z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 20px;
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  padding: 40px;
-  border-radius: 28px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 48px 40px;
+  border-radius: 32px;
+  box-shadow: 0 20px 40px rgba(31, 38, 135, 0.04), 
+              0 1px 2px rgba(0, 0, 0, 0.02);
   text-align: center;
-  animation: cardFadeIn 0.5s ease-out;
+  animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pokeball-logo {
-  width: 76px;
-  height: 76px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
-  border: 3.5px solid #1a202c;
+  border: 3px solid #2d3748;
   position: relative;
-  margin: 0 auto 20px;
+  margin: 0 auto 24px;
   overflow: hidden;
-  animation: float 3s ease-in-out infinite;
-  box-shadow: 0 6px 15px rgba(255, 83, 80, 0.2);
+  animation: floatBall 4s ease-in-out infinite;
+  box-shadow: 0 8px 20px rgba(255, 83, 80, 0.12);
 }
 
 .pokeball-top {
   height: 50%;
-  background: #ff5350;
+  background: #ff5e5b;
 }
 
 .pokeball-bottom {
   height: 50%;
-  background: #fbfbfb;
+  background: #ffffff;
 }
 
 .pokeball-center {
   width: 100%;
   height: 6px;
-  background: #1a202c;
+  background: #2d3748;
   position: absolute;
   top: calc(50% - 3px);
   display: flex;
@@ -118,107 +119,131 @@
 }
 
 .pokeball-button {
-  width: 20px;
-  height: 20px;
-  background: #fff;
-  border: 3px solid #1a202c;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border: 3px solid #2d3748;
   border-radius: 50%;
   position: absolute;
   z-index: 10;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  animation: pulseButton 2s infinite ease-in-out;
 }
 
 h2 {
   color: #1a202c;
   margin: 0 0 8px;
-  font-size: 26px;
-  font-weight: 850;
-  letter-spacing: 0.5px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
   color: #718096;
-  margin: 0 0 30px;
+  margin: 0 0 36px;
   font-size: 14px;
   font-weight: 500;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 label {
   display: block;
   color: #4a5568;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 input {
   width: 100%;
   padding: 14px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   background: rgba(255, 255, 255, 0.8);
   color: #1a202c;
   font-size: 15px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   box-sizing: border-box;
 }
 
 input:focus {
   outline: none;
-  border-color: #ff5350;
-  background: white;
-  box-shadow: 0 0 10px rgba(255, 83, 80, 0.15);
+  border-color: #ff5e5b;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 94, 91, 0.08);
 }
 
 .error-text {
   color: #e53e3e;
   font-size: 13px;
-  margin: 10px 0 20px;
+  margin: -8px 0 24px;
   text-align: left;
   background: #fff5f5;
   border: 1px solid #fed7d7;
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  animation: shake 0.4s ease-in-out;
 }
 
 button {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 15px;
+  border-radius: 14px;
   border: none;
-  background: #ff5350;
-  color: #fff;
+  background: #ff5e5b;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 15px rgba(255, 83, 80, 0.25);
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 16px rgba(255, 94, 91, 0.2);
 }
 
 button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(255, 83, 80, 0.35);
+  background: #ff4a47;
+  box-shadow: 0 8px 24px rgba(255, 94, 91, 0.3);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 button:disabled {
-  background: #cbd5e0;
-  color: #718096;
+  background: #e2e8f0;
+  color: #a0aec0;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-@keyframes float {
+/* Animaciones */
+@keyframes floatBall {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseButton {
+  0%, 100% { background-color: #ffffff; box-shadow: 0 0 4px rgba(255, 255, 255, 0.8); }
+  50% { background-color: #ffeaea; box-shadow: 0 0 10px rgba(255, 94, 91, 0.5); }
 }
 
 @keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
