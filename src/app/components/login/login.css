@@ -1,0 +1,224 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100%;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  background-color: #f7fafc;
+  overflow: hidden;
+}
+
+.login-wrapper {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Difuminado de Fondo (Backdrop Blobs) */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+  animation: floatBlobs 20s infinite alternate ease-in-out;
+}
+
+.blob-red {
+  width: 350px;
+  height: 350px;
+  background-color: #ff8a88;
+  top: -100px;
+  right: -50px;
+}
+
+.blob-yellow {
+  width: 400px;
+  height: 400px;
+  background-color: #ffe680;
+  bottom: -150px;
+  left: 20%;
+  animation-delay: -5s;
+}
+
+.blob-blue {
+  width: 300px;
+  height: 300px;
+  background-color: #b3d1ff;
+  top: 40%;
+  left: -100px;
+  animation-delay: -10s;
+}
+
+@keyframes floatBlobs {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(40px, 30px) scale(1.15);
+  }
+}
+
+.login-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 40px;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+  text-align: center;
+  animation: cardFadeIn 0.5s ease-out;
+}
+
+.pokeball-logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3.5px solid #1a202c;
+  position: relative;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  animation: float 3s ease-in-out infinite;
+  box-shadow: 0 6px 15px rgba(255, 83, 80, 0.2);
+}
+
+.pokeball-top {
+  height: 50%;
+  background: #ff5350;
+}
+
+.pokeball-bottom {
+  height: 50%;
+  background: #fbfbfb;
+}
+
+.pokeball-center {
+  width: 100%;
+  height: 6px;
+  background: #1a202c;
+  position: absolute;
+  top: calc(50% - 3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokeball-button {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 3px solid #1a202c;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 10;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+h2 {
+  color: #1a202c;
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 850;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  color: #718096;
+  margin: 0 0 30px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  color: #4a5568;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  color: #1a202c;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff5350;
+  background: white;
+  box-shadow: 0 0 10px rgba(255, 83, 80, 0.15);
+}
+
+.error-text {
+  color: #e53e3e;
+  font-size: 13px;
+  margin: 10px 0 20px;
+  text-align: left;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #ff5350;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 15px rgba(255, 83, 80, 0.25);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 83, 80, 0.35);
+}
+
+button:disabled {
+  background: #cbd5e0;
+  color: #718096;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
