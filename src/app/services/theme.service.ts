@@ -13,7 +13,7 @@ export class ThemeService {
   private loadTheme(): void {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('pokedex-theme');
-      // Por defecto iniciamos en el Modo Claro de la Pokédex (el rediseño light-blue)
+      // por defecto modo claro
       const isDark = savedTheme === 'dark';
       this.isDarkTheme.set(isDark);
       this.applyTheme(isDark);

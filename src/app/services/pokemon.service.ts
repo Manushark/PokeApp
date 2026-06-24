@@ -9,7 +9,7 @@ import { tap, map } from 'rxjs/operators';
 export class PokemonService {
   private baseUrl = 'https://pokeapi.co/api/v2';
   
-  // Caché de peticiones para máxima velocidad de respuesta (Instantánea)
+  // cache para no repetir peticiones
   private pokemonCache = new Map<string, any>();
   private typesCache: any[] = [];
   private typePokemonCache = new Map<string, any>();
@@ -19,7 +19,7 @@ export class PokemonService {
 
   constructor(private http: HttpClient) { }
 
-  // Opción 1: Obtener un Pokémon aleatorio (con caché rápida)
+  // pokemon aleatorio
   getRandomPokemon(): Observable<any> {
     const randomId = Math.floor(Math.random() * 151) + 1;
     const cacheKey = String(randomId);
@@ -36,7 +36,7 @@ export class PokemonService {
     );
   }
 
-  // Opción 2: Listar tipos de Pokémon (con caché estática)
+  // lista de tipos
   getPokemonTypes(): Observable<any> {
     if (this.typesCache.length > 0) {
       return of({ results: this.typesCache });
@@ -44,7 +44,7 @@ export class PokemonService {
 
     return this.http.get<any>(`${this.baseUrl}/type/`).pipe(
       map(data => {
-        // Ignorar tipos que no contienen Pokémon de la primera generación
+        // ignoramos estos tipos raros
         const ignoredTypes = ['unknown', 'shadow', 'stellar'];
         const filtered = data.results.filter((t: any) => !ignoredTypes.includes(t.name.toLowerCase()));
         return { results: filtered };
@@ -55,7 +55,7 @@ export class PokemonService {
     );
   }
 
-  // Opción 3: Buscar Pokémon por nombre o ID (con caché instantánea)
+  // buscar por nombre o id
   getPokemonByName(name: string): Observable<any> {
     const formattedName = name.trim().toLowerCase();
 
@@ -71,7 +71,7 @@ export class PokemonService {
     );
   }
 
-  // Obtener la lista de Pokémon que pertenecen a un tipo elemental específico (con caché)
+  // pokemon de un tipo concreto
   getPokemonByType(typeName: string): Observable<any> {
     const formattedType = typeName.trim().toLowerCase();
 
@@ -86,7 +86,7 @@ export class PokemonService {
     );
   }
 
-  // Obtener la descripción del Pokémon en español desde el endpoint species (con caché)
+  // descripcion en español
   getPokemonDescription(id: number): Observable<string> {
     if (this.speciesCache.has(id)) {
       return of(this.speciesCache.get(id)!);
@@ -95,7 +95,7 @@ export class PokemonService {
     return this.http.get<any>(`${this.baseUrl}/pokemon-species/${id}`).pipe(
       map(data => {
         const entry = data.flavor_text_entries.find((e: any) => e.language.name === 'es');
-        // Limpiamos los saltos de línea extraños que a veces devuelve la PokéAPI (\f, \n, etc.)
+        // limpiamos saltos de linea raros que devuelve la api
         const desc = entry 
           ? entry.flavor_text.replace(/[\n\f\r]/g, ' ') 
           : 'No hay una descripción disponible en español para este Pokémon.';
@@ -105,7 +105,7 @@ export class PokemonService {
     );
   }
 
-  // Obtener la información completa de la especie (para la cadena de evolución)
+  // datos de la especie
   getPokemonSpecies(id: number): Observable<any> {
     if (this.speciesDataCache.has(id)) {
       return of(this.speciesDataCache.get(id));
@@ -115,7 +115,7 @@ export class PokemonService {
     );
   }
 
-  // Obtener la cadena de evolución del Pokémon
+  // cadena de evoluciones
   getEvolutionChain(url: string): Observable<any> {
     if (this.evolutionChainCache.has(url)) {
       return of(this.evolutionChainCache.get(url));

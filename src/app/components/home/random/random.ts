@@ -15,7 +15,7 @@ export class RandomComponent {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   
-  // Control para abrir el modal detallado
+  // pokemon que se muestra en el modal
   selectedPokemonForModal = signal<any>(null);
 
   constructor(private pokemonService: PokemonService) {

@@ -18,10 +18,10 @@ export class SearchComponent implements OnInit {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
   
-  // Control para abrir el modal detallado
+  // para el modal
   selectedPokemonForModal = signal<any>(null);
 
-  // Pokémon destacados para sugerencias
+  // sugerencias de busqueda
   featuredPokemons = signal<any[]>([]);
   loadingFeatured = signal<boolean>(false);
 

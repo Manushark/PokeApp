@@ -2,13 +2,13 @@
   @if (currentPokemon()) {
     <div class="modal-card" (click)="$event.stopPropagation()" [style.border-color]="getTypeTextColor(currentPokemon().types[0].type.name)">
       
-      <!-- Botón de Cerrar -->
+      <!-- boton cerrar -->
       <button class="close-btn" (click)="close.emit()" aria-label="Cerrar">
         ✕
       </button>
 
       <div class="modal-layout">
-        <!-- Columna Izquierda: Imagen y Nombre -->
+        <!-- imagen y nombre -->
         <div class="modal-left" [style.background-color]="getTypeColor(currentPokemon().types[0].type.name) + '20'">
           <div class="poke-id">#{{ currentPokemon().id | number:'3.0' }}</div>
           
@@ -46,9 +46,9 @@
           </div>
         </div>
 
-        <!-- Columna Derecha: Detalles, Habilidades, Estadísticas y Evolución -->
+        <!-- info del pokemon -->
         <div class="modal-right">
-          <!-- Descripción de la Pokedex -->
+          <!-- descripcion -->
           <div class="details-section">
             <h3>Descripción Pokédex</h3>
             @if (loadingDescription()) {
@@ -61,7 +61,7 @@
             }
           </div>
 
-          <!-- Habilidades -->
+          <!-- habilidades -->
           <div class="details-section">
             <h3>Habilidades</h3>
             <div class="abilities-list">
@@ -76,7 +76,7 @@
             </div>
           </div>
 
-          <!-- Estadísticas Base -->
+          <!-- estadisticas -->
           <div class="details-section">
             <h3>Estadísticas Base</h3>
             <div class="stats-bars-container">
@@ -96,7 +96,7 @@
             </div>
           </div>
 
-          <!-- Cadena de Evolución -->
+          <!-- evoluciones -->
           <div class="details-section">
             <h3>Cadena de Evolución</h3>
             @if (loadingEvolution()) {

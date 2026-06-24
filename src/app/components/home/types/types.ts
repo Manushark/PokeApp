@@ -15,12 +15,12 @@ export class TypesComponent {
   loading = signal<boolean>(false);
   errorMessage = signal<string>('');
 
-  // Control para mostrar los Pokémon de un tipo seleccionado
+  // tipo elegido y sus pokemon
   selectedType = signal<string | null>(null);
   pokemonOfSelectedType = signal<any[]>([]);
   loadingPokemon = signal<boolean>(false);
 
-  // Control para el modal detallado
+  // para el modal
   loadingModal = signal<boolean>(false);
   selectedPokemonForModal = signal<any>(null);
 
@@ -52,8 +52,7 @@ export class TypesComponent {
 
     this.pokemonService.getPokemonByType(typeName).subscribe({
       next: (data: any) => {
-        // PokéAPI nos devuelve una lista de: { pokemon: { name: string, url: string } }
-        // Parseamos la URL para extraer el ID nacional y crear la URL de la imagen en alta calidad
+        // la api devuelve nombre y url, sacamos el id para construir la imagen
         const parsedList = data.pokemon
           .map((p: any) => {
             const id = p.pokemon.url.split('/').filter(Boolean).pop();
@@ -63,7 +62,7 @@ export class TypesComponent {
               imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
             };
           })
-          // Filtramos para quedarnos con los Pokémon de la primera generación (1-151)
+          // solo primera generacion (1-151)
           .filter((p: any) => p.id <= 151)
           .sort((a: any, b: any) => a.id - b.id);
 

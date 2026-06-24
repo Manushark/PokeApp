@@ -20,7 +20,7 @@
 
   @if (pokemonData() && !loading()) {
     <div class="pokemon-card-container">
-      <!-- Añadido evento de click para abrir el modal -->
+      <!-- click para abrir el modal -->
       <div 
         class="pokemon-card" 
         (click)="selectedPokemonForModal.set(pokemonData())"
@@ -79,7 +79,7 @@
     </div>
   }
 
-  <!-- Renderizado del Modal Detallado -->
+  <!-- modal de detalles -->
   @if (selectedPokemonForModal()) {
     <app-pokemon-detail-modal 
       [pokemon]="selectedPokemonForModal()" 

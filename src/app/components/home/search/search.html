@@ -4,7 +4,7 @@
     <p>Busca un Pokémon específico por su nombre o su ID nacional.</p>
   </div>
 
-  <!-- Formulario de Búsqueda -->
+  <!-- buscador -->
   @if (!pokemonData() && !loading()) {
     <div class="search-form-container">
       <div class="search-box">
@@ -20,7 +20,7 @@
         <p class="search-hint">Puedes buscar por nombre o número de Pokédex.</p>
       </div>
 
-      <!-- Pokémon Destacados (Sugerencias) -->
+      <!-- sugerencias -->
       <div class="featured-section">
         <h3>Sugerencias de Búsqueda</h3>
         
@@ -75,10 +75,10 @@
     </div>
   }
 
-  <!-- Detalle del Pokémon Encontrado -->
+  <!-- resultado encontrado -->
   @if (pokemonData() && !loading()) {
     <div class="pokemon-card-container">
-      <!-- Añadido evento de click para abrir el modal -->
+      <!-- click para abrir el modal -->
       <div 
         class="pokemon-card" 
         (click)="selectedPokemonForModal.set(pokemonData())"
@@ -137,7 +137,7 @@
     </div>
   }
 
-  <!-- Renderizado del Modal Detallado -->
+  <!-- modal de detalles -->
   @if (selectedPokemonForModal()) {
     <app-pokemon-detail-modal 
       [pokemon]="selectedPokemonForModal()" 
