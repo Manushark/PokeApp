@@ -1,1 +1,122 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos Globales para PokeApp - Cyber Pokédex Theme */
+
+:root {
+  /* ================== TEMA CLARO DIGITAL (DEFAULT) ================== */
+  --screen-bg: #e0f2fe; /* Pantalla azul claro */
+  --sidebar-bg: #bae6fd; /* Sidebar celeste */
+  --sidebar-border: rgba(0, 150, 255, 0.15);
+  --panel-bg: #ffffff; /* Vidrio claro */
+  --panel-border: rgba(0, 150, 255, 0.15);
+  --panel-grid-radial: rgba(0, 122, 255, 0.05);
+  --panel-grid-linear-1: rgba(0, 122, 255, 0.02);
+  --panel-grid-linear-2: rgba(0, 122, 255, 0.02);
+  --text-primary: #1a202c; /* Texto oscuro de alta legibilidad */
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --nav-text: #0369a1; /* Texto de navegación azul oscuro */
+  --nav-hover-bg: rgba(0, 122, 255, 0.06);
+  --nav-hover-text: #007aff;
+  --nav-active-bg: #ffffff;
+  --nav-active-text: #ff5e5b;
+  --nav-active-border: rgba(255, 94, 91, 0.15);
+  --nav-active-shadow: rgba(255, 94, 91, 0.03);
+  --card-bg: rgba(255, 255, 255, 0.75); /* Cristal blanco translúcido */
+  --card-border-default: rgba(255, 255, 255, 0.9);
+  --card-image-bg: rgba(255, 255, 255, 0.85);
+  --card-image-border: rgba(255, 255, 255, 0.9);
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.08);
+  --input-text: #1a202c;
+  --button-bg-secondary: #ffffff;
+  --button-border-secondary: rgba(0, 0, 0, 0.06);
+  --button-text-secondary: #4a5568;
+  --scrollbar-track-bg: rgba(0, 122, 255, 0.03);
+  --scrollbar-thumb-bg: rgba(0, 122, 255, 0.2);
+  --scrollbar-thumb-hover: rgba(0, 122, 255, 0.4);
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.25);
+  --loader-text: #718096;
+}
+
+body.dark-theme {
+  /* ================== TEMA OSCURO CYBER ================== */
+  --screen-bg: #070d18; /* Pantalla azul oscuro cyber */
+  --sidebar-bg: #09101f; /* Sidebar profundo */
+  --sidebar-border: rgba(0, 242, 254, 0.25);
+  --panel-bg: rgba(10, 20, 38, 0.75); /* Panel de cristal oscuro */
+  --panel-border: rgba(0, 242, 254, 0.35); /* Borde cian neón brillante */
+  --panel-grid-radial: rgba(0, 242, 254, 0.08);
+  --panel-grid-linear-1: rgba(0, 242, 254, 0.03);
+  --panel-grid-linear-2: rgba(0, 242, 254, 0.03);
+  --text-primary: #e2f1ff; /* Texto cian claro brillante */
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  --nav-text: #00f2fe; /* Texto de navegación cian neón */
+  --nav-hover-bg: rgba(0, 242, 254, 0.08);
+  --nav-hover-text: #00f2fe;
+  --nav-active-bg: #00f2fe; /* Fondo cian neón activo */
+  --nav-active-text: #070d18; /* Texto oscuro sobre cian neón */
+  --nav-active-border: rgba(0, 242, 254, 0.5);
+  --nav-active-shadow: rgba(0, 242, 254, 0.25);
+  --card-bg: rgba(13, 22, 40, 0.85); /* Tarjetas de cristal oscuro */
+  --card-border-default: rgba(0, 242, 254, 0.2);
+  --card-image-bg: rgba(7, 13, 26, 0.85); /* Fondo interno oscuro para ilustraciones */
+  --card-image-border: rgba(0, 242, 254, 0.25);
+  --input-bg: rgba(7, 13, 26, 0.9);
+  --input-border: rgba(0, 242, 254, 0.3);
+  --input-text: #e2f1ff;
+  --button-bg-secondary: rgba(10, 20, 38, 0.9);
+  --button-border-secondary: rgba(0, 242, 254, 0.25);
+  --button-text-secondary: #00f2fe;
+  --scrollbar-track-bg: rgba(7, 13, 36, 0.6);
+  --scrollbar-thumb-bg: rgba(0, 242, 254, 0.3);
+  --scrollbar-thumb-hover: rgba(0, 242, 254, 0.6);
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.6);
+  --loader-text: #00f2fe;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #1a0508; /* Casing exterior de la Pokédex profundo */
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: color 0.3s ease;
+}
+
+/* Scrollbar digital futurista / minimalista */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Animaciones globales y transiciones suaves */
+.nav-item, .type-badge, .pokemon-card, .mini-pokemon-card, button, input {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Foco de inputs globales */
+input:focus {
+  outline: none;
+  border-color: #00f2fe !important;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2) !important;
+}
