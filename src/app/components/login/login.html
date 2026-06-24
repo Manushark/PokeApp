@@ -1,0 +1,48 @@
+<div class="login-wrapper">
+  <!-- Diffused backdrop elements for UI depth -->
+  <div class="blob blob-red"></div>
+  <div class="blob blob-yellow"></div>
+  <div class="blob blob-blue"></div>
+  
+  <div class="login-container">
+    <div class="login-card">
+      <div class="pokeball-logo">
+        <div class="pokeball-top"></div>
+        <div class="pokeball-center">
+          <div class="pokeball-button"></div>
+        </div>
+        <div class="pokeball-bottom"></div>
+      </div>
+
+      <h2>¡Hola, Entrenador!</h2>
+      <p class="subtitle">Inicia sesión para acceder a tu Pokédex</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Usuario</label>
+          <input 
+            type="text" 
+            id="username" 
+            formControlName="username"
+            placeholder="Escribe 'Entrenador'" 
+            autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password" 
+            placeholder="Escribe '1234'">
+        </div>
+
+        @if (errorMessage) {
+          <p class="error-text">{{ errorMessage }}</p>
+        }
+
+        <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+      </form>
+    </div>
+  </div>
+</div>
