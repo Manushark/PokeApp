@@ -1,0 +1,50 @@
+<div class="dashboard-wrapper">
+  <!-- Diffused backdrop elements for UI depth -->
+  <div class="blob blob-red"></div>
+  <div class="blob blob-yellow"></div>
+  <div class="blob blob-blue"></div>
+  
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="mini-pokeball"></div>
+        <h2>PokéApp</h2>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a 
+          routerLink="/home/random" 
+          routerLinkActive="active" 
+          class="nav-item">
+          <span class="label">Pokémon Aleatorio</span>
+        </a>
+        <a 
+          routerLink="/home/types" 
+          routerLinkActive="active" 
+          class="nav-item">
+          <span class="label">Listar Tipos</span>
+        </a>
+        <a 
+          routerLink="/home/search" 
+          routerLinkActive="active" 
+          class="nav-item">
+          <span class="label">Buscar Pokémon</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a routerLink="/config" class="config-link">
+          <span class="label">Configuración</span>
+        </a>
+      </div>
+    </aside>
+    
+    <!-- Main content area -->
+    <main class="main-content">
+      <div class="main-glass-panel">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
