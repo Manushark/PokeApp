@@ -14,6 +14,8 @@ export class PokemonService {
   private typesCache: any[] = [];
   private typePokemonCache = new Map<string, any>();
   private speciesCache = new Map<number, string>();
+  private speciesDataCache = new Map<number, any>();
+  private evolutionChainCache = new Map<string, any>();
 
   constructor(private http: HttpClient) { }
 
@@ -41,6 +43,12 @@ export class PokemonService {
     }
 
     return this.http.get<any>(`${this.baseUrl}/type/`).pipe(
+      map(data => {
+        // Ignorar tipos que no contienen Pokémon de la primera generación
+        const ignoredTypes = ['unknown', 'shadow', 'stellar'];
+        const filtered = data.results.filter((t: any) => !ignoredTypes.includes(t.name.toLowerCase()));
+        return { results: filtered };
+      }),
       tap(data => {
         this.typesCache = data.results;
       })
@@ -94,6 +102,26 @@ export class PokemonService {
         this.speciesCache.set(id, desc);
         return desc;
       })
+    );
+  }
+
+  // Obtener la información completa de la especie (para la cadena de evolución)
+  getPokemonSpecies(id: number): Observable<any> {
+    if (this.speciesDataCache.has(id)) {
+      return of(this.speciesDataCache.get(id));
+    }
+    return this.http.get<any>(`${this.baseUrl}/pokemon-species/${id}`).pipe(
+      tap(data => this.speciesDataCache.set(id, data))
+    );
+  }
+
+  // Obtener la cadena de evolución del Pokémon
+  getEvolutionChain(url: string): Observable<any> {
+    if (this.evolutionChainCache.has(url)) {
+      return of(this.evolutionChainCache.get(url));
+    }
+    return this.http.get<any>(url).pipe(
+      tap(data => this.evolutionChainCache.set(url, data))
     );
   }
 }
