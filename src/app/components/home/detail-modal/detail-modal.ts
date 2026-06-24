@@ -13,22 +13,31 @@ export class PokemonDetailModalComponent implements OnChanges {
   @Input() pokemon: any = null;
   @Output() close = new EventEmitter<void>();
 
+  currentPokemon = signal<any>(null);
   description = signal<string>('');
   loadingDescription = signal<boolean>(false);
+  evolutionChain = signal<any[]>([]);
+  loadingEvolution = signal<boolean>(false);
 
   constructor(private pokemonService: PokemonService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['pokemon'] && this.pokemon) {
-      this.loadDescription();
+      this.selectPokemon(this.pokemon);
     }
+  }
+
+  selectPokemon(pokeData: any) {
+    this.currentPokemon.set(pokeData);
+    this.loadDescription();
+    this.loadEvolutionChain();
   }
 
   loadDescription() {
     this.loadingDescription.set(true);
     this.description.set('');
     
-    this.pokemonService.getPokemonDescription(this.pokemon.id).subscribe({
+    this.pokemonService.getPokemonDescription(this.currentPokemon().id).subscribe({
       next: (desc: string) => {
         this.description.set(desc);
         this.loadingDescription.set(false);
@@ -36,6 +45,79 @@ export class PokemonDetailModalComponent implements OnChanges {
       error: () => {
         this.description.set('No se pudo cargar la descripción de la Pokédex.');
         this.loadingDescription.set(false);
+      }
+    });
+  }
+
+  loadEvolutionChain() {
+    this.loadingEvolution.set(true);
+    this.evolutionChain.set([]);
+
+    this.pokemonService.getPokemonSpecies(this.currentPokemon().id).subscribe({
+      next: (speciesData: any) => {
+        const chainUrl = speciesData.evolution_chain?.url;
+        if (!chainUrl) {
+          this.loadingEvolution.set(false);
+          return;
+        }
+
+        this.pokemonService.getEvolutionChain(chainUrl).subscribe({
+          next: (chainData: any) => {
+            const parsed = this.parseEvolutionChain(chainData.chain);
+            this.evolutionChain.set(parsed);
+            this.loadingEvolution.set(false);
+          },
+          error: () => {
+            this.loadingEvolution.set(false);
+          }
+        });
+      },
+      error: () => {
+        this.loadingEvolution.set(false);
+      }
+    });
+  }
+
+  parseEvolutionChain(chain: any): any[] {
+    const list: any[] = [];
+    let current = chain;
+
+    while (current) {
+      const speciesUrl = current.species.url;
+      const id = this.extractIdFromUrl(speciesUrl);
+      
+      list.push({
+        name: current.species.name,
+        id: id,
+        imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+      });
+
+      if (current.evolves_to && current.evolves_to.length > 0) {
+        current = current.evolves_to[0];
+      } else {
+        current = null;
+      }
+    }
+    return list;
+  }
+
+  extractIdFromUrl(url: string): number {
+    const parts = url.split('/').filter(Boolean);
+    return Number(parts[parts.length - 1]);
+  }
+
+  onEvolutionClick(pokemonName: string) {
+    if (pokemonName === this.currentPokemon().name) return;
+    this.loadingDescription.set(true);
+    this.loadingEvolution.set(true);
+
+    this.pokemonService.getPokemonByName(pokemonName).subscribe({
+      next: (pokeData: any) => {
+        this.selectPokemon(pokeData);
+      },
+      error: () => {
+        this.loadingDescription.set(false);
+        this.loadingEvolution.set(false);
       }
     });
   }
