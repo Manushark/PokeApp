@@ -9,7 +9,7 @@ Explora el mundo Pokémon con una interfaz moderna, modo oscuro y datos en tiemp
 [![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![PokéAPI](https://img.shields.io/badge/PokéAPI-v2-EF5350?style=for-the-badge)](https://pokeapi.co)
-[![Netlify](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com)
+[![Netlify](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://poke-appz.netlify.app/home/random)
 
 </div>
 
@@ -134,7 +134,11 @@ La app trabaja exclusivamente con los **151 Pokémon de la 1ª generación** par
 
 ## 🌐 Despliegue
 
-El proyecto está configurado para desplegarse automáticamente en **Netlify**:
+El proyecto está desplegado y disponible en:
+
+🔗 **[https://poke-appz.netlify.app/home/random](https://poke-appz.netlify.app/home/random)**
+
+Configurado para desplegarse automáticamente en **Netlify**:
 
 ```toml
 # netlify.toml
