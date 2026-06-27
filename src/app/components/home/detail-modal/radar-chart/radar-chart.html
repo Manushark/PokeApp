@@ -1,0 +1,57 @@
+<div class="radar-wrapper">
+  <svg
+    class="radar-svg"
+    [attr.viewBox]="'0 0 ' + SIZE + ' ' + SIZE"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="Gráfico de estadísticas del Pokémon">
+
+    <!-- Grid rings (background hexagons) -->
+    @for (ring of gridRings; track $index) {
+      <polygon
+        class="radar-grid-ring"
+        [attr.points]="ring" />
+    }
+
+    <!-- Axis lines -->
+    @for (axis of axisLines; track $index) {
+      <line
+        class="radar-axis"
+        [attr.x1]="axis.x1"
+        [attr.y1]="axis.y1"
+        [attr.x2]="axis.x2"
+        [attr.y2]="axis.y2" />
+    }
+
+    <!-- Data polygon fill (area) -->
+    <polygon
+      class="radar-fill"
+      [attr.points]="polygonPoints"
+      [attr.fill]="bgColor + '55'"
+      [attr.stroke]="color" />
+
+    <!-- Data polygon vertices (dots) -->
+    @for (lp of labelPositions; track $index) {
+      <!-- Vertex dot on the data polygon surface -->
+    }
+
+    <!-- Labels with stat abbreviation and value -->
+    @for (lp of labelPositions; track $index) {
+      <text
+        class="radar-label-name"
+        [attr.x]="lp.x"
+        [attr.y]="lp.y - 5"
+        [attr.text-anchor]="lp.anchor">
+        {{ lp.label }}
+      </text>
+      <text
+        class="radar-label-value"
+        [attr.x]="lp.x"
+        [attr.y]="lp.y + 9"
+        [attr.text-anchor]="lp.anchor"
+        [attr.fill]="color">
+        {{ lp.value }}
+      </text>
+    }
+  </svg>
+</div>
