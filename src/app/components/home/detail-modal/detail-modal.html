@@ -76,21 +76,33 @@
             </div>
           </div>
 
-          <!-- estadisticas -->
+          <!-- estadisticas: Gráfico de Radar SVG -->
           <div class="details-section">
             <h3>Estadísticas Base</h3>
-            <div class="stats-bars-container">
+            <app-radar-chart
+              [stats]="currentPokemon().stats"
+              [color]="getTypeTextColor(currentPokemon().types[0].type.name)"
+              [bgColor]="getTypeColor(currentPokemon().types[0].type.name)">
+            </app-radar-chart>
+
+            <!-- Leyenda numérica compacta bajo el radar -->
+            <div class="stats-legend">
               @for (st of currentPokemon().stats; track st.stat.name) {
-                <div class="stat-bar-row">
-                  <span class="stat-label">{{ translateStatName(st.stat.name) }}</span>
-                  <span class="stat-value">{{ st.base_stat }}</span>
-                  <div class="progress-bar-bg">
-                    <div 
-                      class="progress-bar-fill" 
+                <div class="stat-legend-row">
+                  <span class="stat-dot"
+                    [style.background-color]="getTypeTextColor(currentPokemon().types[0].type.name)">
+                  </span>
+                  <span class="stat-legend-label">{{ translateStatName(st.stat.name) }}</span>
+                  <span class="stat-legend-bar-bg">
+                    <span class="stat-legend-bar-fill"
                       [style.width.%]="(st.base_stat / 150) * 100"
                       [style.background-color]="getTypeTextColor(currentPokemon().types[0].type.name)">
-                    </div>
-                  </div>
+                    </span>
+                  </span>
+                  <span class="stat-legend-value"
+                    [style.color]="getTypeTextColor(currentPokemon().types[0].type.name)">
+                    {{ st.base_stat }}
+                  </span>
                 </div>
               }
             </div>
