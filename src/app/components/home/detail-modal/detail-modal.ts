@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { TitleCasePipe, DecimalPipe } from '@angular/common';
 import { PokemonService } from '../../../services/pokemon.service';
+import { RadarChartComponent } from './radar-chart/radar-chart';
 
 @Component({
   selector: 'app-pokemon-detail-modal',
   standalone: true,
-  imports: [TitleCasePipe, DecimalPipe],
+  imports: [TitleCasePipe, DecimalPipe, RadarChartComponent],
   templateUrl: './detail-modal.html',
   styleUrl: './detail-modal.css'
 })
