@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 @Injectable({
@@ -16,12 +16,14 @@ export class PokemonService {
   private speciesCache = new Map<number, string>();
   private speciesDataCache = new Map<number, any>();
   private evolutionChainCache = new Map<string, any>();
+  private pokemonListCache = new Map<string, any>();
+  private typeDistributionCache: {type: string, count: number}[] | null = null;
 
   constructor(private http: HttpClient) { }
 
-  // pokemon aleatorio
+  // pokemon aleatorio — ahora del rango completo 1-1025
   getRandomPokemon(): Observable<any> {
-    const randomId = Math.floor(Math.random() * 151) + 1;
+    const randomId = Math.floor(Math.random() * 1025) + 1;
     const cacheKey = String(randomId);
 
     if (this.pokemonCache.has(cacheKey)) {
@@ -33,6 +35,58 @@ export class PokemonService {
         this.pokemonCache.set(cacheKey, data);
         this.pokemonCache.set(data.name.toLowerCase(), data);
       })
+    );
+  }
+
+  // lista paginada ligera (nombre + url) — un solo request por página
+  getPokemonList(limit: number, offset: number): Observable<{count: number, results: {name: string, url: string}[]}> {
+    const cacheKey = `list_${limit}_${offset}`;
+    if (this.pokemonListCache.has(cacheKey)) {
+      return of(this.pokemonListCache.get(cacheKey));
+    }
+    return this.http.get<any>(`${this.baseUrl}/pokemon?limit=${limit}&offset=${offset}`).pipe(
+      tap(data => this.pokemonListCache.set(cacheKey, data))
+    );
+  }
+
+  // carga en paralelo de múltiples pokemon (con forkJoin + caché)
+  getPokemonBatch(ids: number[]): Observable<any[]> {
+    const requests = ids.map(id => {
+      const cacheKey = String(id);
+      if (this.pokemonCache.has(cacheKey)) {
+        return of(this.pokemonCache.get(cacheKey));
+      }
+      return this.http.get<any>(`${this.baseUrl}/pokemon/${id}`).pipe(
+        tap(data => {
+          this.pokemonCache.set(cacheKey, data);
+          this.pokemonCache.set(data.name.toLowerCase(), data);
+        })
+      );
+    });
+    return forkJoin(requests);
+  }
+
+  // distribución de pokemon por tipo (18 tipos en paralelo)
+  getTypeDistribution(): Observable<{type: string, count: number}[]> {
+    if (this.typeDistributionCache) {
+      return of(this.typeDistributionCache);
+    }
+    const types = [
+      'normal', 'fire', 'water', 'electric', 'grass', 'ice',
+      'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+      'rock', 'ghost', 'dragon', 'steel', 'fairy', 'dark'
+    ];
+    const requests = types.map(t => this.getPokemonByType(t));
+    return forkJoin(requests).pipe(
+      map(results =>
+        results
+          .map((r: any, i: number) => ({
+            type: types[i],
+            count: (r.pokemon?.length || 0)
+          }))
+          .sort((a, b) => b.count - a.count)
+      ),
+      tap(data => { this.typeDistributionCache = data; })
     );
   }
 
