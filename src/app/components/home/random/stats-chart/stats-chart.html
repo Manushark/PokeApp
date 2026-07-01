@@ -1,0 +1,117 @@
+<div class="charts-wrapper">
+
+  <!-- ══════════════════════════════════════════════
+       SECCIÓN 1: Distribución por Tipo
+  ══════════════════════════════════════════════ -->
+  <section class="chart-card">
+    <div class="chart-card-header">
+      <div class="chart-card-title">
+        <span class="chart-icon">🗂️</span>
+        <div>
+          <h3>Distribución por Tipo</h3>
+          <p>Número de Pokémon en cada categoría (incluye formas alternativas)</p>
+        </div>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="chart-loading">
+        <div class="chart-spinner"></div>
+        <span>Cargando distribución de tipos...</span>
+      </div>
+    } @else if (typeDistribution.length === 0) {
+      <p class="chart-empty">Sin datos disponibles.</p>
+    } @else {
+      <div class="type-bars-list">
+        @for (item of typeDistribution; track item.type; let i = $index) {
+          <div class="type-bar-row" [style.animation-delay]="(i * 40) + 'ms'">
+            <!-- Badge tipo -->
+            <span class="type-label-badge"
+              [style.background-color]="getTypeColor(item.type) + '33'"
+              [style.color]="getTypeTextColor(item.type)"
+              [style.border-color]="getTypeTextColor(item.type) + '40'">
+              {{ translateType(item.type) }}
+            </span>
+
+            <!-- Barra de progreso -->
+            <div class="type-bar-track">
+              <div class="type-bar-fill"
+                [style.width.%]="getTypeBarWidth(item.count)"
+                [style.background]="'linear-gradient(90deg, ' + getTypeColor(item.type) + ', ' + getTypeTextColor(item.type) + '88)'">
+              </div>
+            </div>
+
+            <!-- Valores -->
+            <div class="type-bar-values">
+              <span class="type-count" [style.color]="getTypeTextColor(item.type)">{{ item.count }}</span>
+              <span class="type-percent">{{ getTypePercent(item.count) }}%</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SECCIÓN 2: Top 10 por Estadística
+  ══════════════════════════════════════════════ -->
+  <section class="chart-card">
+    <div class="chart-card-header">
+      <div class="chart-card-title">
+        <span class="chart-icon">🏆</span>
+        <div>
+          <h3>Top 10 Pokémon</h3>
+          <p>Ranking de los mejores en cada estadística base</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selector de estadística -->
+    <div class="stat-selector">
+      @for (opt of STAT_OPTIONS; track opt.key) {
+        <button
+          class="stat-pill"
+          [class.active]="selectedStat === opt.key"
+          (click)="changeStat(opt.key)">
+          {{ opt.label }}
+        </button>
+      }
+    </div>
+
+    @if (loadingTop10) {
+      <div class="chart-loading">
+        <div class="chart-spinner"></div>
+        <span>Analizando Pokémon...</span>
+      </div>
+    } @else if (top10Data.length === 0) {
+      <p class="chart-empty">Selecciona una estadística para ver el ranking.</p>
+    } @else {
+      <div class="top10-list">
+        @for (item of top10Data; track item.id; let i = $index) {
+          <div class="top10-row" [style.animation-delay]="(i * 60) + 'ms'">
+            <!-- Posición -->
+            <span class="rank-badge" [class.gold]="i === 0" [class.silver]="i === 1" [class.bronze]="i === 2">
+              {{ i + 1 }}
+            </span>
+
+            <!-- Sprite -->
+            <img class="rank-sprite" [src]="item.spriteUrl" [alt]="item.name" loading="lazy">
+
+            <!-- Nombre -->
+            <span class="rank-name">{{ item.name | titlecase }}</span>
+
+            <!-- Barra de valor -->
+            <div class="rank-bar-track">
+              <div class="rank-bar-fill" [style.width.%]="getStatBarWidth(item.value)">
+              </div>
+            </div>
+
+            <!-- Valor numérico -->
+            <span class="rank-value">{{ item.value }}</span>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+</div>
