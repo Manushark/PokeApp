@@ -1,0 +1,300 @@
+:host {
+  display: block;
+}
+
+.charts-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Card contenedor ─── */
+.chart-card {
+  background: var(--card-bg);
+  border: 1px solid var(--sidebar-border);
+  border-radius: 20px;
+  padding: 24px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.chart-card-header {
+  margin-bottom: 20px;
+}
+
+.chart-card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.chart-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.chart-card-title h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+  transition: color 0.3s ease;
+}
+
+.chart-card-title p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+/* ─── Loading / empty ─── */
+.chart-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.chart-spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid var(--sidebar-border);
+  border-top-color: #ff5e5b;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+  transition: border-color 0.3s ease;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.chart-empty {
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+  transition: color 0.3s ease;
+}
+
+/* ─── Distribución de tipos ─── */
+.type-bars-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.type-bar-row {
+  display: grid;
+  grid-template-columns: 88px 1fr 72px;
+  align-items: center;
+  gap: 10px;
+  animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.type-label-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1.5px solid;
+  text-align: center;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.type-bar-track {
+  height: 10px;
+  background: var(--button-bg-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.type-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: growBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes growBar {
+  from { width: 0 !important; }
+}
+
+.type-bar-values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.type-count {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.type-percent {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+/* ─── Selector de estadística ─── */
+.stat-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stat-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--sidebar-border);
+  background: var(--button-bg-secondary);
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+}
+
+.stat-pill:hover {
+  border-color: #ff5e5b;
+  color: #ff5e5b;
+}
+
+.stat-pill.active {
+  background: #ff5e5b;
+  border-color: #ff5e5b;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 94, 91, 0.3);
+}
+
+/* ─── Top 10 list ─── */
+.top10-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.top10-row {
+  display: grid;
+  grid-template-columns: 28px 36px 1fr auto 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--button-bg-secondary);
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  cursor: default;
+}
+
+.top10-row:hover {
+  transform: translateX(4px);
+}
+
+.rank-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1.5px solid var(--sidebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.rank-badge.gold {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border-color: #FFA500;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.4);
+}
+
+.rank-badge.silver {
+  background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  border-color: #A0A0A0;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(160, 160, 160, 0.4);
+}
+
+.rank-badge.bronze {
+  background: linear-gradient(135deg, #CD7F32, #A0522D);
+  border-color: #A0522D;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(160, 82, 45, 0.35);
+}
+
+.rank-sprite {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+}
+
+.rank-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-bar-track {
+  height: 6px;
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.rank-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff5e5b, #FF8C00);
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: growBar 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.rank-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ff5e5b;
+  text-align: right;
+  white-space: nowrap;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
