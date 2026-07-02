@@ -1,89 +1,196 @@
-<div class="tab-content-wrapper">
-  <div class="content-header">
-    <h2>Pokémon Aleatorio</h2>
-    <p>Descubre un Pokémon al azar de la primera generación.</p>
+<div class="explorer-wrapper">
+
+  <!-- ══════════════════════════════════════════════
+       CABECERA + TABS DE NAVEGACIÓN
+  ══════════════════════════════════════════════ -->
+  <div class="explorer-header">
+    <div class="header-text">
+      <h2>Pokédex Explorer</h2>
+      <p>{{ TOTAL_POKEMON }} Pokémon — Todas las generaciones</p>
+    </div>
+
+    <div class="view-tabs">
+      <button
+        class="view-tab"
+        [class.active]="activeView() === 'gallery'"
+        (click)="switchView('gallery')">
+        <span class="tab-icon">🗺️</span>
+        <span>Galería</span>
+      </button>
+
+      <button
+        class="view-tab"
+        [class.active]="activeView() === 'random'"
+        (click)="loadRandomPokemon()">
+        <span class="tab-icon">🎲</span>
+        <span>Aleatorio</span>
+      </button>
+
+      <button
+        class="view-tab"
+        [class.active]="activeView() === 'charts'"
+        (click)="switchView('charts')">
+        <span class="tab-icon">📊</span>
+        <span>Estadísticas</span>
+      </button>
+    </div>
   </div>
 
-  @if (loading()) {
-    <div class="loader-container">
-      <div class="spinning-pokeball"></div>
-      <p>Buscando en la hierba alta...</p>
-    </div>
-  }
-
-  @if (errorMessage() && !loading()) {
-    <div class="error-container">
-      <p class="error-msg">Error: {{ errorMessage() }}</p>
-      <button class="retry-btn" (click)="loadRandomPokemon()">Reintentar</button>
-    </div>
-  }
-
-  @if (pokemonData() && !loading()) {
-    <div class="pokemon-card-container">
-      <!-- click para abrir el modal -->
-      <div 
-        class="pokemon-card" 
-        (click)="selectedPokemonForModal.set(pokemonData())"
-        style="cursor: pointer"
-        [style.border-color]="getTypeTextColor(pokemonData().types[0].type.name) + '45'" 
-        [style.background-color]="getTypeColor(pokemonData().types[0].type.name) + '20'">
-        
-        <div class="card-header">
-          <span class="pokemon-id">#{{ pokemonData().id | number:'3.0' }}</span>
-          <span class="pokemon-hp" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
-            HP {{ pokemonData().stats[0].base_stat }}
-          </span>
+  <!-- ══════════════════════════════════════════════
+       VISTA: GALERÍA
+  ══════════════════════════════════════════════ -->
+  @if (activeView() === 'gallery') {
+    <div class="gallery-section">
+      @if (loadingGallery()) {
+        <div class="loader-container">
+          <div class="spinning-pokeball"></div>
+          <p>Cargando Pokédex...</p>
         </div>
-
-        <div class="card-image-bg">
-          <img 
-            [src]="pokemonData().sprites.other['official-artwork'].front_default || pokemonData().sprites.front_default" 
-            [alt]="pokemonData().name">
-        </div>
-
-        <h2 class="pokemon-name" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
-          {{ pokemonData().name | titlecase }}
-        </h2>
-        
-        <div class="types-badges">
-          @for (t of pokemonData().types; track t.type.name) {
-            <span 
-              class="type-badge" 
-              [style.background-color]="getTypeColor(t.type.name) + '20'"
-              [style.color]="getTypeTextColor(t.type.name)"
-              [style.border-color]="getTypeTextColor(t.type.name) + '45'">
-              {{ translateType(t.type.name) }}
-            </span>
+      } @else {
+        <!-- Grid de tarjetas -->
+        <div class="pokemon-gallery-grid">
+          @for (card of galleryCards(); track card.id) {
+            <div
+              class="gallery-card"
+              (click)="openGalleryCard(card)"
+              [title]="card.name | titlecase">
+              <span class="gallery-card-id">#{{ card.id }}</span>
+              <div class="gallery-card-img-wrap">
+                <img [src]="card.spriteUrl" [alt]="card.name" loading="lazy">
+              </div>
+              <span class="gallery-card-name">{{ card.name | titlecase }}</span>
+            </div>
           }
         </div>
 
-        <div class="stats-row">
-          <div class="stat-col">
-            <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
-              {{ pokemonData().weight / 10 }} kg
-            </strong>
-            <span>Peso</span>
-          </div>
-          <div class="stat-col">
-            <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
-              {{ pokemonData().height / 10 }} m
-            </strong>
-            <span>Altura</span>
-          </div>
-        </div>
-      </div>
+        <!-- Paginación -->
+        <div class="pagination-bar">
+          <button class="page-btn icon-btn" (click)="goToPage(1)" [disabled]="currentPage() === 1" title="Primera página">
+            «
+          </button>
+          <button class="page-btn icon-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" title="Anterior">
+            ‹
+          </button>
 
-      <button class="reload-btn" (click)="loadRandomPokemon()">
-        Cargar otro Pokémon
-      </button>
+          <span class="page-info">
+            <strong>{{ currentPage() }}</strong> / {{ totalPages() }}
+          </span>
+
+          <button class="page-btn icon-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" title="Siguiente">
+            ›
+          </button>
+          <button class="page-btn icon-btn" (click)="goToPage(totalPages())" [disabled]="currentPage() === totalPages()" title="Última página">
+            »
+          </button>
+        </div>
+      }
     </div>
   }
 
-  <!-- modal de detalles -->
+  <!-- ══════════════════════════════════════════════
+       VISTA: POKÉMON ALEATORIO
+  ══════════════════════════════════════════════ -->
+  @if (activeView() === 'random') {
+    <div class="random-section">
+
+      @if (loading()) {
+        <div class="loader-container">
+          <div class="spinning-pokeball"></div>
+          <p>Buscando en la hierba alta...</p>
+        </div>
+      }
+
+      @if (errorMessage() && !loading()) {
+        <div class="error-container">
+          <p class="error-msg">⚠️ {{ errorMessage() }}</p>
+          <button class="retry-btn" (click)="loadRandomPokemon()">Reintentar</button>
+        </div>
+      }
+
+      @if (pokemonData() && !loading()) {
+        <div class="pokemon-card-container">
+          <div
+            class="pokemon-card"
+            (click)="selectedPokemonForModal.set(pokemonData())"
+            style="cursor: pointer"
+            [style.border-color]="getTypeTextColor(pokemonData().types[0].type.name) + '45'"
+            [style.background-color]="getTypeColor(pokemonData().types[0].type.name) + '20'">
+
+            <div class="card-header">
+              <span class="pokemon-id">#{{ pokemonData().id | number:'3.0' }}</span>
+              <span class="pokemon-hp" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+                HP {{ pokemonData().stats[0].base_stat }}
+              </span>
+            </div>
+
+            <div class="card-image-bg">
+              <img
+                [src]="pokemonData().sprites.other['official-artwork'].front_default || pokemonData().sprites.front_default"
+                [alt]="pokemonData().name">
+            </div>
+
+            <h2 class="pokemon-name" [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+              {{ pokemonData().name | titlecase }}
+            </h2>
+
+            <div class="types-badges">
+              @for (t of pokemonData().types; track t.type.name) {
+                <span
+                  class="type-badge"
+                  [style.background-color]="getTypeColor(t.type.name) + '20'"
+                  [style.color]="getTypeTextColor(t.type.name)"
+                  [style.border-color]="getTypeTextColor(t.type.name) + '45'">
+                  {{ translateType(t.type.name) }}
+                </span>
+              }
+            </div>
+
+            <div class="stats-row">
+              <div class="stat-col">
+                <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+                  {{ pokemonData().weight / 10 }} kg
+                </strong>
+                <span>Peso</span>
+              </div>
+              <div class="stat-col">
+                <strong [style.color]="getTypeTextColor(pokemonData().types[0].type.name)">
+                  {{ pokemonData().height / 10 }} m
+                </strong>
+                <span>Altura</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="reload-btn" (click)="loadRandomPokemon()">
+            🎲 Otro Pokémon
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════
+       VISTA: CHARTS / ESTADÍSTICAS
+  ══════════════════════════════════════════════ -->
+  @if (activeView() === 'charts') {
+    <app-stats-chart
+      [typeDistribution]="typeDistribution()"
+      [top10Data]="top10Data()"
+      [selectedStat]="selectedStat()"
+      [loading]="loadingCharts()"
+      [loadingTop10]="loadingTop10()"
+      (statChanged)="loadTop10($event)">
+    </app-stats-chart>
+  }
+
+  <!-- ══════════════════════════════════════════════
+       MODAL DE DETALLE (global)
+  ══════════════════════════════════════════════ -->
   @if (selectedPokemonForModal()) {
-    <app-pokemon-detail-modal 
-      [pokemon]="selectedPokemonForModal()" 
+    <app-pokemon-detail-modal
+      [pokemon]="selectedPokemonForModal()"
       (close)="clearModal()">
     </app-pokemon-detail-modal>
   }
+
 </div>
